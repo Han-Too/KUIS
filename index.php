@@ -1,6 +1,6 @@
 <?php
     $conn = mysqli_connect("localhost", "root","","farhan");
-
+    error_reporting(0);
     
 
     if(isset($_POST['submit'])){
@@ -93,7 +93,7 @@ else {
 }
     while($v = mysqli_fetch_array($view))
        {    
-    if($v['kdbuku'] == 'SOS010' || $v['kdbuku'] == 'SOS12'){
+    if($v['kdbuku'] == 'SOS010' || $v['kdbuku'] == 'SOS112'){
         $new = $v['kdbuku'];
         $kode = substr($new,0,3);
             $jenis = "Sosial";
@@ -156,9 +156,11 @@ else {
             </tr>
             <?php $i++; }    ?>
                 </table>
-                <h1>Total Diskon = <?=$totaldiskon ?></h1>
-                <h1>Total Harga Sewa = <?=$totalharga ?></h1>
-                
+                <br>
+                <table>
+                <th>Total Diskon = <?=$totaldiskon ?> | </th>
+                <th>Total Harga Sewa = <?=$totalharga ?></th>
+                </table>
               </body>
               </center>
 </html>
