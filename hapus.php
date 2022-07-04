@@ -1,7 +1,7 @@
 <?php
-  $conn = mysqli_connect("localhost", "root","","KUIS");
-$kdikan = $_GET['kd_ikan'];
-$query="DELETE FROM tbl_ikan WHERE kd_ikan='$kdikan'";
+  $conn = mysqli_connect("localhost", "root","","farhan");
+$kdbuku = $_GET['kdbuku'];
+$query="DELETE FROM tbl_farhan WHERE kdbuku='$kdbuku'";
 mysqli_query($conn,$query);
 header("Location:index.php");
 ?>
