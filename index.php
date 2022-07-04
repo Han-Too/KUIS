@@ -1,18 +1,9 @@
 <?php
     $conn = mysqli_connect("localhost", "root","","KUIS");
 
-    $view = mysqli_query($conn,"SELECT * FROM tbl_ikan");
-    $view2 = mysqli_query($conn,"SELECT COUNT(kd_ikan) FROM tblM tbl_ikan");
     
-
-if(isset($_POST["cari"])){
-    $conn = mysqli_connect("localhost", "root","","KUIS");
-
-    $cari = $_POST["cari"];
-
-    $kueri = mysqli_query($conn,"SELECT * FROM tbl_ikan WHERE cari LIKE '%$cari%'");
-
-}
+    $view2 = mysqli_query($conn,"SELECT COUNT(kd_ikan) FROM tbl_ikan");
+  
 
     if(isset($_POST['submit'])){
     $conn = mysqli_connect("localhost", "root","","KUIS");
@@ -39,20 +30,33 @@ if(isset($_POST["cari"])){
             <label>Cari</label>
             <input type="text" name="key">
             <input type="submit" name="cari" value="CARI"><br><br><br>
+           <?php
+            if(isset($_POST["key"])){
+    $cari = $_POST["key"];
+    echo "<b>Hasil pencarian : ".$cari."</b>";
+}?>
         </form>
     <table border="1">
         
     </table>
         <form action="" method="post">
-            <label for="">Kode Ikan</label>
-            <input type="text" name="kdikan"><br>
-            <label for="">Nama Ikan</label>
-            <input type="text" name="namaikan"><br>
-            <label for="">Jumlah</label>
-            <input type="text" name="jumlah"><br>
-            <label for="">Harga Satuan</label>
-            <input type="text" name="hargasatuan"><br>
-            <input type="submit" name="submit" value="KIRIM">
+            <table>
+                <tr>
+            <td><label for="">Kode Ikan</label></td>
+            <td><input type="text" name="kdikan"><br></td>
+            </tr>
+            <tr>
+            <td><label for="">Nama Ikan</label></td>
+            <td><input type="text" name="namaikan"><br></td>
+            </tr><tr>
+            <td><label for="">Jumlah</label></td>
+            <td><input type="text" name="jumlah"><br></td>
+            </tr><tr>
+            <td><label for="">Harga Satuan</label></td>
+            <td><input type="text" name="hargasatuan"><br></td>
+            </tr><tr>
+            <td colspan="2" align="center"><input type="submit" name="submit" value="KIRIM"></td></tr>
+            </table>
         </form>
   
         <h1>Data IKAN</h1>
@@ -65,10 +69,18 @@ if(isset($_POST["cari"])){
                 <th>Total Harga</th>
                 <th>Diskon</th>
                 <th>Harga Bersih</th>
+                <th>Aksi</th>
             </tr>
             <?php 
-                foreach($view as $v):
-                    $kaliharga = $v['jumlah']*$v['harga_satuan'];
+if(isset($_POST["key"])){ 
+    $cari = $_POST["key"];
+    $view = mysqli_query($conn,"SELECT * FROM tbl_ikan WHERE kd_ikan LIKE '%".$cari."%' OR nama_ikan LIKE '%".$cari."%' OR jumlah LIKE '%".$cari."%' ");
+}
+else { 
+    $view = mysqli_query($conn,"SELECT * FROM tbl_ikan");
+}
+    while($v = mysqli_fetch_array($view)){
+     $kaliharga = $v['jumlah']*$v['harga_satuan'];
     if($kaliharga >= 60000){
         $dis = 0.6;
         $x = $dis*$kaliharga;
@@ -98,9 +110,13 @@ if(isset($_POST["cari"])){
                 <th><?=$kaliharga ?></th>
                 <th><?=$x ?></th>
                 <th><?=$totalharga ?></th>
+                <th>
+                    <a href="edit.php?kd_ikan=<?=$v['kd_ikan'] ?>">Edit</a> | 
+                    <a href="hapus.php?kd_ikan=<?=$v['kd_ikan'] ?>">Hapus</a>
+                </th>
             </tr>
             <?php
-endforeach; ?>
+}    ?>
                 </table>
               </body>
 </html>
